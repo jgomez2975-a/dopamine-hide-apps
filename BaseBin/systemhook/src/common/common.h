@@ -10,7 +10,10 @@ typedef enum
 {
 	kSpawnConfigInject = 1 << 0,
 	kSpawnConfigTrust = 1 << 1,
+	kSpawnConfigHide = 1 << 2,
 } kSpawnConfig;
+
+#define HIDE_DYLIB_PATH "/usr/lib/hidehook.dylib"
 
 int __posix_spawn(pid_t *restrict pid, const char *restrict path, struct _posix_spawn_args_desc *desc, char *const argv[restrict], char *const envp[restrict]);
 int __execve(const char *path, char *const argv[], char *const envp[]);

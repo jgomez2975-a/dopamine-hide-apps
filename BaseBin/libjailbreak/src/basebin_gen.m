@@ -113,6 +113,7 @@ int basebin_generate_internal(NSString *originUsrLibPath, NSString *basebinPath,
 
 	NSString *fakelibDyldPath        = [fakelibPath stringByAppendingPathComponent:@"dyld"];
 	NSString *fakelibSystemHookPath  = [fakelibPath stringByAppendingPathComponent:@"systemhook.dylib"];
+	NSString *fakelibHideHookPath    = [fakelibPath stringByAppendingPathComponent:@"hidehook.dylib"];
 
 	NSString *dyldOrigPath           = [genPath stringByAppendingPathComponent:@"dyld.orig"];
 	NSString *dyldInflightPath       = [genPath stringByAppendingPathComponent:@"dyld.inflight"];
@@ -121,6 +122,7 @@ int basebin_generate_internal(NSString *originUsrLibPath, NSString *basebinPath,
 
 	NSString *targetDyldPath         = [targetBasebinPath stringByAppendingPathComponent:@"gen/dyld"];
 	NSString *targetSystemhookPath   = [targetBasebinPath stringByAppendingPathComponent:@"systemhook.dylib"];
+	NSString *targetHidehookPath     = [targetBasebinPath stringByAppendingPathComponent:@"hidehook.dylib"];
 	
 	NSString *dopamineVersion = [NSString stringWithContentsOfFile:versionPath encoding:NSUTF8StringEncoding error:nil];
 	if (!dopamineVersion) return 1;
@@ -141,6 +143,9 @@ int basebin_generate_internal(NSString *originUsrLibPath, NSString *basebinPath,
 
 		// Symlink .fakelib/systemhook.dylib -> /var/jb/basebin/systemhook.dylib
 		[[NSFileManager defaultManager] createSymbolicLinkAtPath:fakelibSystemHookPath withDestinationPath:targetSystemhookPath error:nil];
+
+		// Symlink .fakelib/hidehook.dylib -> /var/jb/basebin/hidehook.dylib
+		[[NSFileManager defaultManager] createSymbolicLinkAtPath:fakelibHideHookPath withDestinationPath:targetHidehookPath error:nil];
 
 		// Backup original dyld
 		carbonCopy(dyldPath, dyldOrigPath);

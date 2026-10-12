@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Filter</key>
+	<dict>
+		<key>Bundles</key>
+		<array>
+			<string>com.alipay.iphoneclient</string>
+			<string>com.tencent.xin</string>
+			<string>com.tencent.mqq</string>
+			<string>com.unionpay.chsp</string>
+			<string>com.unionpay.mobilepay</string>
+			<string>com.chinamworld.main</string>
+			<string>com.icbc.iphoneclient</string>
+			<string>com.abc.iphoneclient</string>
+			<string>cmb.pb</string>
+			<string>com.apple.Passbook</string>
+			<string>com.paypal.PPClient</string>
+		</array>
+	</dict>
+</dict>
+</plist>

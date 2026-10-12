@@ -10,6 +10,8 @@
 		040622AA2B77FE8E00393AAD /* DOPkgManagerPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 040622A92B77FE8E00393AAD /* DOPkgManagerPickerViewController.m */; };
 		042479A22B66916B0082581B /* DOCreditsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0424796B2B66916B0082581B /* DOCreditsViewController.m */; };
 		042479A32B66916B0082581B /* DOSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0424796C2B66916B0082581B /* DOSettingsController.m */; };
+		A11E00012C9A00010000HIDE /* DOHideJailbreakAppsController.m in Sources */ = {isa = PBXBuildFile; fileRef = A11E00032C9A00010000HIDE /* DOHideJailbreakAppsController.m */; };
+		A11E00022C9A00010000HIDE /* DOHideJailbreakConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = A11E00052C9A00010000HIDE /* DOHideJailbreakConfig.m */; };
 		042479A42B66916B0082581B /* Credits.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0424796F2B66916B0082581B /* Credits.plist */; };
 		042479A52B66916B0082581B /* DOCreditsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 042479732B66916B0082581B /* DOCreditsCell.m */; };
 		042479A62B66916B0082581B /* DOHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 042479752B66916B0082581B /* DOHeaderCell.m */; };
@@ -391,6 +393,10 @@
 		042479682B66916B0082581B /* DOJailbreakButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DOJailbreakButton.h; sourceTree = "<group>"; };
 		0424796B2B66916B0082581B /* DOCreditsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DOCreditsViewController.m; sourceTree = "<group>"; };
 		0424796C2B66916B0082581B /* DOSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DOSettingsController.m; sourceTree = "<group>"; };
+		A11E00032C9A00010000HIDE /* DOHideJailbreakAppsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DOHideJailbreakAppsController.m; sourceTree = "<group>"; };
+		A11E00042C9A00010000HIDE /* DOHideJailbreakAppsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DOHideJailbreakAppsController.h; sourceTree = "<group>"; };
+		A11E00052C9A00010000HIDE /* DOHideJailbreakConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DOHideJailbreakConfig.m; sourceTree = "<group>"; };
+		A11E00062C9A00010000HIDE /* DOHideJailbreakConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DOHideJailbreakConfig.h; sourceTree = "<group>"; };
 		0424796D2B66916B0082581B /* DOPSListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DOPSListController.h; sourceTree = "<group>"; };
 		0424796E2B66916B0082581B /* DOCreditsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DOCreditsViewController.h; sourceTree = "<group>"; };
 		0424796F2B66916B0082581B /* Credits.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Credits.plist; sourceTree = "<group>"; };
@@ -888,6 +894,8 @@
 				0424796B2B66916B0082581B /* DOCreditsViewController.m */,
 				042479702B66916B0082581B /* DOSettingsController.h */,
 				0424796C2B66916B0082581B /* DOSettingsController.m */,
+				A11E00042C9A00010000HIDE /* DOHideJailbreakAppsController.h */,
+				A11E00032C9A00010000HIDE /* DOHideJailbreakAppsController.m */,
 				04DD0B332B7BA38C0055DE4F /* DOLicenseViewController.h */,
 				04DD0B342B7BA38C0055DE4F /* DOLicenseViewController.m */,
 			);
@@ -1083,6 +1091,8 @@
 				8C029F422B4DFD5D0071DE58 /* DOExploitManager.m */,
 				8C029F5E2B4E25350071DE58 /* DOEnvironmentManager.h */,
 				8C029F5F2B4E25350071DE58 /* DOEnvironmentManager.m */,
+				A11E00062C9A00010000HIDE /* DOHideJailbreakConfig.h */,
+				A11E00052C9A00010000HIDE /* DOHideJailbreakConfig.m */,
 				8C4ABEBC2B52274300B43C9B /* DOPreferenceManager.h */,
 				8C4ABEBD2B52274300B43C9B /* DOPreferenceManager.m */,
 			);
@@ -2325,6 +2335,8 @@
 				042479B62B66916B0082581B /* DOActionMenuButton.m in Sources */,
 				8C71981D2ABF0E82003C6658 /* DOSceneDelegate.m in Sources */,
 				042479A32B66916B0082581B /* DOSettingsController.m in Sources */,
+				A11E00012C9A00010000HIDE /* DOHideJailbreakAppsController.m in Sources */,
+				A11E00022C9A00010000HIDE /* DOHideJailbreakConfig.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -124,3 +124,11 @@
 "Status_Title_Select_Package_Managers" = "请选择包管理器";
 "Select_Package_Managers_Install_Message" = "如果你不确定选择哪一个比较好，请选择 Sileo";
 "Continue" = "继续";
+
+"Settings_Hide_Jailbreak_Apps" = "按 App 隐藏越狱痕迹";
+"Section_Hide_Jailbreak_Apps" = "按应用隐藏越狱";
+"Section_Installed_Apps" = "已安装应用";
+"Hint_Hide_Jailbreak_Apps" = "被勾选的 App 不会注入插件。hidehook 会对该进程隐藏越狱路径、dylib、URL Scheme、dyld 镜像、SSH/Frida 端口以及常见越狱文件。改完后请彻底杀掉并重开目标 App。首次打开会预勾选银行/支付类应用。";
+"Button_Hide_Bank_Apps" = "一键隐藏银行/支付 App";
+"Button_Clear_Hidden_Apps" = "清空隐藏列表";
+"Hint_Hidden_App_Count" = "当前已对 %@ 个 App 隐藏越狱痕迹";

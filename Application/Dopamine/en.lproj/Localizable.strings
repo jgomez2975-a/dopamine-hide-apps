@@ -129,3 +129,11 @@
 "Status_Title_Select_Package_Managers" = "Select Package Manager(s)";
 "Select_Package_Managers_Install_Message" = "If you are unsure which one to select, select Sileo";
 "Continue" = "Continue";
+
+"Settings_Hide_Jailbreak_Apps" = "Hide Jailbreak From Apps";
+"Section_Hide_Jailbreak_Apps" = "Per-App Jailbreak Concealment";
+"Section_Installed_Apps" = "Installed Apps";
+"Hint_Hide_Jailbreak_Apps" = "Selected apps will not receive tweak injection. hidehook conceals jailbreak paths, dylibs, URL schemes, dyld images, SSH/Frida ports, and common jailbreak files from those processes. Restart the target app after changing this list. Banking apps are preselected when first opened.";
+"Button_Hide_Bank_Apps" = "Hide From Banks / Payments";
+"Button_Clear_Hidden_Apps" = "Clear Hidden List";
+"Hint_Hidden_App_Count" = "%@ apps currently conceal jailbreak traces";

@@ -142,6 +142,18 @@ static kSpawnConfig spawn_config_for_executable(const char* path, char *const ar
 		}
 	}
 
+	xpc_object_t hideList = jbuserconfig_get_value("HideJailbreakApps");
+	if (hideList && xpc_get_type(hideList) == XPC_TYPE_ARRAY) {
+		size_t hideCount = xpc_array_get_count(hideList);
+		for (size_t i = 0; i < hideCount; i++) {
+			const char *entry = xpc_array_get_string(hideList, i);
+			if (!entry) continue;
+			if (!strcmp(entry, path) || (path && strstr(path, entry))) {
+				return (kSpawnConfigTrust | kSpawnConfigHide);
+			}
+		}
+	}
+
 	return (kSpawnConfigInject | kSpawnConfigTrust);
 }
 
@@ -178,15 +190,27 @@ static int spawn_exec_hook_common(bool isExec,
 
 	const char *existingLibraryInserts = envbuf_getenv((const char **)envp, "DYLD_INSERT_LIBRARIES");
 	__block bool systemHookAlreadyInserted = false;
+	__block bool hideHookAlreadyInserted = false;
 	if (existingLibraryInserts) {
 		string_enumerate_components(existingLibraryInserts, ":", ^(const char *existingLibraryInsert, bool *stop) {
 			if (!strcmp(existingLibraryInsert, HOOK_DYLIB_PATH)) {
 				systemHookAlreadyInserted = true;
 			}
+			if (!strcmp(existingLibraryInsert, HIDE_DYLIB_PATH)) {
+				hideHookAlreadyInserted = true;
+			}
 		});
 	}
 
 	int JBEnvAlreadyInsertedCount = (int)systemHookAlreadyInserted;
+	bool shouldInsertHideHook = (spawnConfig & kSpawnConfigHide) != 0;
+	if (shouldInsertHideHook) {
+		if (access(HIDE_DYLIB_PATH, F_OK) == 0) {
+			trust_binary(HIDE_DYLIB_PATH);
+		} else {
+			shouldInsertHideHook = false;
+		}
+	}
 
 	// Check if we can find at least one reason to not insert jailbreak related environment variables
 	// In this case we also need to remove pre existing environment variables if they are already set
@@ -296,7 +320,7 @@ static int spawn_exec_hook_common(bool isExec,
 
 	pid_t childPid = -1;
 
-	if ((shouldInsertJBEnv && JBEnvAlreadyInsertedCount == 1) || (!shouldInsertJBEnv && JBEnvAlreadyInsertedCount == 0 && !hasSafeModeVariable)) {
+	if ((shouldInsertJBEnv && JBEnvAlreadyInsertedCount == 1 && !shouldInsertHideHook) || (!shouldInsertJBEnv && !shouldInsertHideHook && JBEnvAlreadyInsertedCount == 0 && !hasSafeModeVariable && !hideHookAlreadyInserted) || (shouldInsertHideHook && hideHookAlreadyInserted && !systemHookAlreadyInserted && !shouldInsertJBEnv)) {
 		// we're already good, just call orig
 		r = orig(&childPid, envp);
 	}
@@ -316,6 +340,14 @@ static int spawn_exec_hook_common(bool isExec,
 				envbuf_setenv(&envc, "DYLD_INSERT_LIBRARIES", newLibraryInsert);
 			}
 		}
+		else if (shouldInsertHideHook) {
+			if (!hideHookAlreadyInserted || systemHookAlreadyInserted) {
+				envbuf_setenv(&envc, "DYLD_INSERT_LIBRARIES", HIDE_DYLIB_PATH);
+			}
+			envbuf_unsetenv(&envc, "_SafeMode");
+			envbuf_unsetenv(&envc, "_MSSafeMode");
+			envbuf_unsetenv(&envc, "JB_ROOT_PATH");
+		}
 		else {
 			if (systemHookAlreadyInserted && existingLibraryInserts) {
 				if (!strcmp(existingLibraryInserts, HOOK_DYLIB_PATH)) {
@@ -327,7 +359,7 @@ static int spawn_exec_hook_common(bool isExec,
 
 					__block bool first = true;
 					string_enumerate_components(existingLibraryInserts, ":", ^(const char *existingLibraryInsert, bool *stop) {
-						if (strcmp(existingLibraryInsert, HOOK_DYLIB_PATH) != 0) {
+						if (strcmp(existingLibraryInsert, HOOK_DYLIB_PATH) != 0 && strcmp(existingLibraryInsert, HIDE_DYLIB_PATH) != 0) {
 							if (first) {
 								strcpy(newLibraryInsert, existingLibraryInsert);
 								first = false;
