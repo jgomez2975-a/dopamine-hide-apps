@@ -84,8 +84,8 @@ static NSArray *DODefaultBankBundleIDs(void)
 }
 
 @interface DOHideJailbreakConfig ()
-@property (nonatomic, strong) NSMutableSet<NSString *> *hiddenIDs;
-@property (nonatomic, strong) NSMutableSet<NSString *> *hiddenPaths;
+@property (nonatomic, strong) NSMutableSet<NSString *> *hiddenIDSet;
+@property (nonatomic, strong) NSMutableSet<NSString *> *hiddenPathSet;
 @end
 
 @implementation DOHideJailbreakConfig
@@ -110,21 +110,21 @@ static NSArray *DODefaultBankBundleIDs(void)
 
 - (void)reload
 {
-    self.hiddenIDs = [NSMutableSet set];
-    self.hiddenPaths = [NSMutableSet set];
+    self.hiddenIDSet = [NSMutableSet set];
+    self.hiddenPathSet = [NSMutableSet set];
     NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:[self configPath]];
     NSArray *ids = dict[@"HideJailbreakBundleIDs"];
     NSArray *paths = dict[@"HideJailbreakApps"];
-    if ([ids isKindOfClass:[NSArray class]]) [self.hiddenIDs addObjectsFromArray:ids];
-    if ([paths isKindOfClass:[NSArray class]]) [self.hiddenPaths addObjectsFromArray:paths];
+    if ([ids isKindOfClass:[NSArray class]]) [self.hiddenIDSet addObjectsFromArray:ids];
+    if ([paths isKindOfClass:[NSArray class]]) [self.hiddenPathSet addObjectsFromArray:paths];
 }
 
 - (void)persist
 {
     NSString *path = [self configPath];
     NSMutableDictionary *dict = [[NSDictionary dictionaryWithContentsOfFile:path] mutableCopy] ?: [NSMutableDictionary dictionary];
-    dict[@"HideJailbreakBundleIDs"] = [self.hiddenIDs.allObjects sortedArrayUsingSelector:@selector(compare:)];
-    dict[@"HideJailbreakApps"] = [self.hiddenPaths.allObjects sortedArrayUsingSelector:@selector(compare:)];
+    dict[@"HideJailbreakBundleIDs"] = [self.hiddenIDSet.allObjects sortedArrayUsingSelector:@selector(compare:)];
+    dict[@"HideJailbreakApps"] = [self.hiddenPathSet.allObjects sortedArrayUsingSelector:@selector(compare:)];
     void (^writeBlock)(void) = ^{
         [[NSFileManager defaultManager] createDirectoryAtPath:[path stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:nil];
         [dict writeToFile:path atomically:YES];
@@ -140,19 +140,19 @@ static NSArray *DODefaultBankBundleIDs(void)
     [self writeTweakFilter];
 }
 
-- (NSSet<NSString *> *)hiddenBundleIDs { return [self.hiddenIDs copy]; }
-- (NSSet<NSString *> *)hiddenPaths { return [self.hiddenPaths copy]; }
-- (BOOL)isBundleHidden:(NSString *)bundleID { return bundleID && [self.hiddenIDs containsObject:bundleID]; }
+- (NSSet<NSString *> *)hiddenBundleIDs { return [self.hiddenIDSet copy]; }
+- (NSSet<NSString *> *)hiddenPaths { return [self.hiddenPathSet copy]; }
+- (BOOL)isBundleHidden:(NSString *)bundleID { return bundleID && [self.hiddenIDSet containsObject:bundleID]; }
 
 - (void)setBundle:(NSString *)bundleID hidden:(BOOL)hidden executablePath:(NSString *)executablePath
 {
     if (bundleID.length == 0) return;
     if (hidden) {
-        [self.hiddenIDs addObject:bundleID];
-        if (executablePath.length) [self.hiddenPaths addObject:executablePath];
+        [self.hiddenIDSet addObject:bundleID];
+        if (executablePath.length) [self.hiddenPathSet addObject:executablePath];
     } else {
-        [self.hiddenIDs removeObject:bundleID];
-        if (executablePath.length) [self.hiddenPaths removeObject:executablePath];
+        [self.hiddenIDSet removeObject:bundleID];
+        if (executablePath.length) [self.hiddenPathSet removeObject:executablePath];
     }
     [self persist];
     [self writeTweakFilter];
@@ -166,14 +166,14 @@ static NSArray *DODefaultBankBundleIDs(void)
     NSSet *defaults = [NSSet setWithArray:DODefaultBankBundleIDs()];
     for (DOHideJailbreakAppItem *app in apps) {
         if ([defaults containsObject:app.bundleID]) {
-            [self.hiddenIDs addObject:app.bundleID];
-            if (app.executablePath.length) [self.hiddenPaths addObject:app.executablePath];
+            [self.hiddenIDSet addObject:app.bundleID];
+            if (app.executablePath.length) [self.hiddenPathSet addObject:app.executablePath];
         }
     }
     NSMutableDictionary *write = [dict mutableCopy] ?: [NSMutableDictionary dictionary];
     write[@"HideJailbreakDefaultsApplied"] = @YES;
-    write[@"HideJailbreakBundleIDs"] = [self.hiddenIDs.allObjects sortedArrayUsingSelector:@selector(compare:)];
-    write[@"HideJailbreakApps"] = [self.hiddenPaths.allObjects sortedArrayUsingSelector:@selector(compare:)];
+    write[@"HideJailbreakBundleIDs"] = [self.hiddenIDSet.allObjects sortedArrayUsingSelector:@selector(compare:)];
+    write[@"HideJailbreakApps"] = [self.hiddenPathSet.allObjects sortedArrayUsingSelector:@selector(compare:)];
     void (^block)(void) = ^{
         [[NSFileManager defaultManager] createDirectoryAtPath:[[self configPath] stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:nil];
         [write writeToFile:[self configPath] atomically:YES];
@@ -194,7 +194,7 @@ static NSArray *DODefaultBankBundleIDs(void)
     NSString *plistPath = [filterDir stringByAppendingPathComponent:@"HideJailbreak.plist"];
     NSDictionary *plist = @{
         @"Filter": @{
-            @"Bundles": [self.hiddenIDs.allObjects sortedArrayUsingSelector:@selector(compare:)]
+            @"Bundles": [self.hiddenIDSet.allObjects sortedArrayUsingSelector:@selector(compare:)]
         }
     };
     void (^block)(void) = ^{
@@ -236,7 +236,7 @@ static NSArray *DODefaultBankBundleIDs(void)
         } else {
             item.executablePath = bundlePath ?: bid;
         }
-        item.hidden = [self.hiddenIDs containsObject:bid] || [self.hiddenPaths containsObject:item.executablePath];
+        item.hidden = [self.hiddenIDSet containsObject:bid] || [self.hiddenPathSet containsObject:item.executablePath];
         [out addObject:item];
     }
     [out sortUsingComparator:^NSComparisonResult(DOHideJailbreakAppItem *a, DOHideJailbreakAppItem *b) {
